@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { LogOut, Package, LayoutDashboard, Users, Search, BarChart3 } from 'lucide-react'
 import { UserRole } from '@/lib/types/database.types'
+import { createClient } from '@/lib/supabase/client'
 
 interface NavbarProps {
   userRole: UserRole | null
@@ -16,26 +17,36 @@ export function Navbar({ userRole, userEmail }: NavbarProps) {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('/auth/logout', { method: 'POST' })
+      const supabase = createClient()
 
-      if (response.ok) {
-        // Clear any local storage/session storage if needed
-        localStorage.clear()
-        sessionStorage.clear()
+      // Sign out using Supabase client
+      await supabase.auth.signOut()
 
-        // Force redirect to login page
-        window.location.href = '/auth/login'
-      } else {
-        console.error('Logout failed:', response.statusText)
-        // Try to redirect anyway
-        window.location.href = '/auth/login'
-      }
-    } catch (error) {
-      console.error('Logout error:', error)
-      // Clear storage and redirect even on error
+      // Clear all cookies by setting them to expire
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c
+          .replace(/^ +/, "")
+          .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/")
+      })
+
+      // Clear all storage
       localStorage.clear()
       sessionStorage.clear()
-      window.location.href = '/auth/login'
+
+      // Force a complete page reload to the login page
+      // This ensures all state is cleared
+      window.location.replace('/auth/login')
+    } catch (error) {
+      console.error('Logout error:', error)
+      // Force clear and redirect even on error
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c
+          .replace(/^ +/, "")
+          .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/")
+      })
+      localStorage.clear()
+      sessionStorage.clear()
+      window.location.replace('/auth/login')
     }
   }
 

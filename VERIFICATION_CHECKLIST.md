@@ -58,11 +58,9 @@ ORDER BY role;
 ```
 
 **Expected Users:**
-- admin@test.com (role: admin)
-- manager@test.com (role: manager)
-- viewer@test.com (role: viewer)
-
-Password for all: `admin@123`
+- admin@test.com (role: admin) - Password: `admin@123`
+- manager@test.com (role: manager) - Password: `password123`
+- viewer@test.com (role: viewer) - Password: `password123`
 
 ---
 
@@ -375,7 +373,9 @@ After deploying to Vercel:
 ### Issue: Can't login
 **Solution:**
 1. Check users exist in Supabase Auth
-2. Verify password is `admin@123`
+2. Verify passwords:
+   - Admin: `admin@123`
+   - Manager/Viewer: `password123`
 3. Check browser cookies are enabled
 
 ### Issue: Buttons not showing for admin

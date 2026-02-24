@@ -113,8 +113,8 @@ function LoginForm() {
             <p className="text-sm font-medium text-blue-900 mb-2">Demo Accounts:</p>
             <ul className="text-xs text-blue-800 space-y-1">
               <li>• Admin: admin@test.com / admin@123</li>
-              <li>• Manager: manager@test.com / admin@123</li>
-              <li>• Viewer: viewer@test.com / admin@123</li>
+              <li>• Manager: manager@test.com / password123</li>
+              <li>• Viewer: viewer@test.com / password123</li>
             </ul>
           </div>
         </div>

@@ -50,8 +50,8 @@ This will create:
 2. Click **Add user** > **Create new user**
 3. Create three users:
    - **Admin**: admin@test.com / admin@123
-   - **Manager**: manager@test.com / admin@123
-   - **Viewer**: viewer@test.com / admin@123
+   - **Manager**: manager@test.com / password123
+   - **Viewer**: viewer@test.com / password123
 
 ### Option B: Via SQL
 
