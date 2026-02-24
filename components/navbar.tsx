@@ -17,14 +17,25 @@ export function Navbar({ userRole, userEmail }: NavbarProps) {
   const handleLogout = async () => {
     try {
       const response = await fetch('/auth/logout', { method: 'POST' })
-      if (response.redirected) {
-        window.location.href = response.url
+
+      if (response.ok) {
+        // Clear any local storage/session storage if needed
+        localStorage.clear()
+        sessionStorage.clear()
+
+        // Force redirect to login page
+        window.location.href = '/auth/login'
       } else {
-        router.push('/auth/login')
+        console.error('Logout failed:', response.statusText)
+        // Try to redirect anyway
+        window.location.href = '/auth/login'
       }
     } catch (error) {
       console.error('Logout error:', error)
-      router.push('/auth/login')
+      // Clear storage and redirect even on error
+      localStorage.clear()
+      sessionStorage.clear()
+      window.location.href = '/auth/login'
     }
   }
 

@@ -4,5 +4,7 @@ import { NextResponse } from 'next/server'
 export async function POST() {
   const supabase = await createServerSupabaseClient()
   await supabase.auth.signOut()
-  return NextResponse.redirect(new URL('/auth/login', process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'))
+
+  // Return JSON response instead of redirect
+  return NextResponse.json({ success: true }, { status: 200 })
 }
