@@ -18,15 +18,25 @@ export default async function DashboardPage() {
     .select('*')
     .eq('status', 'low_stock')
 
-  const { data: recentActivity } = await supabase
+  // Fetch recent activity with simplified query
+  const { data: recentActivity, error: activityError } = await supabase
     .from('activity_logs')
     .select(`
-      *,
-      user_profiles!activity_logs_user_id_fkey (full_name),
+      id,
+      user_id,
+      action,
+      item_id,
+      changes,
+      timestamp,
+      user_profiles (full_name),
       inventory_items (name)
     `)
     .order('timestamp', { ascending: false })
     .limit(5)
+
+  if (activityError) {
+    console.error('Error fetching activity:', activityError)
+  }
 
   const totalItems = items?.length || 0
   const lowStockCount = lowStockItems?.length || 0
