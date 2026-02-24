@@ -49,9 +49,9 @@ This will create:
 1. Go to **Authentication** > **Users**
 2. Click **Add user** > **Create new user**
 3. Create three users:
-   - **Admin**: admin@test.com / password123
-   - **Manager**: manager@test.com / password123
-   - **Viewer**: viewer@test.com / password123
+   - **Admin**: admin@test.com / admin@123
+   - **Manager**: manager@test.com / admin@123
+   - **Viewer**: viewer@test.com / admin@123
 
 ### Option B: Via SQL
 
@@ -185,5 +185,5 @@ Navigate to http://localhost:3000 and test:
 After completing this setup:
 1. Start the development server: `npm run dev`
 2. Navigate to http://localhost:3000
-3. Log in with admin@test.com / password123
+3. Log in with admin@test.com / admin@123
 4. Test all features!

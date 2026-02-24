@@ -97,9 +97,9 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ### 5. Login with Test Accounts
 
 ```
-Admin:   admin@test.com   / password123
-Manager: manager@test.com / password123
-Viewer:  viewer@test.com  / password123
+Admin:   admin@test.com   / admin@123
+Manager: manager@test.com / admin@123
+Viewer:  viewer@test.com  / admin@123
 ```
 
 ## Project Structure
