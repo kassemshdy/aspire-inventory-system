@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app:*)",
+      "Bash(sudo chown:*)",
+      "Bash(npm install:*)"
+    ]
+  }
+}
