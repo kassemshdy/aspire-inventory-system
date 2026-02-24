@@ -1,11 +1,9 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { LogOut, Package, LayoutDashboard, Users, Search, BarChart3, Moon, Sun } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { LogOut, Package, LayoutDashboard, Users, BarChart3 } from 'lucide-react'
 import { UserRole } from '@/lib/types/database.types'
 import { createClient } from '@/lib/supabase/client'
-import { useTheme } from '@/lib/contexts/theme-context'
 
 interface NavbarProps {
   userRole: UserRole | null
@@ -14,8 +12,6 @@ interface NavbarProps {
 
 export function Navbar({ userRole, userEmail }: NavbarProps) {
   const pathname = usePathname()
-  const router = useRouter()
-  const { theme, toggleTheme } = useTheme()
 
   const handleLogout = async () => {
     try {
@@ -68,17 +64,17 @@ export function Navbar({ userRole, userEmail }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
-            <Link href="/dashboard" className="flex items-center">
+            <a href="/dashboard" className="flex items-center">
               <Package className="h-8 w-8 text-blue-600 dark:text-blue-400" />
               <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">Inventory</span>
-            </Link>
+            </a>
 
             <div className="hidden sm:ml-8 sm:flex sm:space-x-4">
               {filteredNavItems.map((item) => {
                 const Icon = item.icon
                 const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
                 return (
-                  <Link
+                  <a
                     key={item.href}
                     href={item.href}
                     className={`inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
@@ -89,7 +85,7 @@ export function Navbar({ userRole, userEmail }: NavbarProps) {
                   >
                     <Icon className="h-4 w-4 mr-2" />
                     {item.label}
-                  </Link>
+                  </a>
                 )
               })}
             </div>
@@ -102,18 +98,6 @@ export function Navbar({ userRole, userEmail }: NavbarProps) {
                 {userRole}
               </span>
             </div>
-
-            <button
-              onClick={toggleTheme}
-              className="inline-flex items-center p-2 border border-gray-300 dark:border-gray-600 shadow-sm rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-              aria-label="Toggle theme"
-            >
-              {theme === 'dark' ? (
-                <Sun className="h-4 w-4" />
-              ) : (
-                <Moon className="h-4 w-4" />
-              )}
-            </button>
 
             <button
               onClick={handleLogout}
@@ -132,7 +116,7 @@ export function Navbar({ userRole, userEmail }: NavbarProps) {
           const Icon = item.icon
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
           return (
-            <Link
+            <a
               key={item.href}
               href={item.href}
               className={`block px-3 py-2 rounded-md text-base font-medium ${
@@ -143,7 +127,7 @@ export function Navbar({ userRole, userEmail }: NavbarProps) {
             >
               <Icon className="inline h-4 w-4 mr-2" />
               {item.label}
-            </Link>
+            </a>
           )
         })}
       </div>

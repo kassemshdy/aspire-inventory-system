@@ -29,13 +29,23 @@ export default async function DashboardPage() {
 
   if (activityData && activityData.length > 0) {
     // Fetch related data separately
-    const userIds = [...new Set(activityData.map(a => a.user_id))]
+    const userIds = [...new Set(activityData.map(a => a.user_id).filter(Boolean))]
     const itemIds = [...new Set(activityData.map(a => a.item_id).filter(Boolean))]
 
-    const { data: users } = await supabase
+    console.log('[Dashboard] Fetching profiles for user IDs:', userIds)
+
+    // Get user profiles with full_name
+    const { data: users, error: usersError } = await supabase
       .from('user_profiles')
       .select('id, full_name')
       .in('id', userIds)
+
+    console.log('[Dashboard] Fetched user profiles:', users)
+    console.log('[Dashboard] User profiles error:', usersError)
+
+    if (usersError) {
+      console.error('Error fetching user profiles:', usersError)
+    }
 
     const { data: items } = await supabase
       .from('inventory_items')
@@ -43,11 +53,25 @@ export default async function DashboardPage() {
       .in('id', itemIds)
 
     // Combine the data
-    recentActivity = activityData.map(activity => ({
-      ...activity,
-      user_profiles: users?.find(u => u.id === activity.user_id) || null,
-      inventory_items: items?.find(i => i.id === activity.item_id) || null,
-    }))
+    recentActivity = activityData.map(activity => {
+      const userProfile = users?.find(u => u.id === activity.user_id)
+
+      console.log(`[Dashboard] Activity ${activity.id}: user_id=${activity.user_id}, profile=`, userProfile)
+
+      // If full_name is empty or null, use a generic label
+      let displayName = 'Unknown User'
+      if (userProfile && userProfile.full_name) {
+        displayName = userProfile.full_name.trim() || 'User'
+      }
+
+      return {
+        ...activity,
+        user_profiles: {
+          full_name: displayName
+        },
+        inventory_items: items?.find(i => i.id === activity.item_id) || null,
+      }
+    })
   }
 
   if (activityError) {
