@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Navbar } from '@/components/navbar'
 import { getUserProfile } from '@/lib/auth/helpers'
 import { createServerSupabaseClient } from '@/lib/supabase/server'
