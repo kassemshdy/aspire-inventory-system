@@ -113,8 +113,19 @@ Response: {
       throw new Error('Unexpected response type from Claude')
     }
 
+    // Extract JSON from response (handle markdown code blocks)
+    let jsonText = content.text.trim()
+
+    // Remove markdown code blocks if present
+    if (jsonText.startsWith('```')) {
+      // Remove ```json or ``` at the start
+      jsonText = jsonText.replace(/^```(?:json)?\s*\n?/, '')
+      // Remove ``` at the end
+      jsonText = jsonText.replace(/\n?```\s*$/, '')
+    }
+
     // Parse the JSON response
-    const result = JSON.parse(content.text) as AISearchResult
+    const result = JSON.parse(jsonText.trim()) as AISearchResult
 
     return result
   } catch (error: any) {
