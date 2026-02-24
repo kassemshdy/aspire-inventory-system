@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { getUserProfile } from '@/lib/auth/helpers'
-import { Package, AlertTriangle, TrendingUp, Activity } from 'lucide-react'
+import { Package, AlertTriangle, TrendingUp, Activity, BarChart3, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
 export default async function DashboardPage() {
@@ -18,21 +18,37 @@ export default async function DashboardPage() {
     .select('*')
     .eq('status', 'low_stock')
 
-  // Fetch recent activity with simplified query
-  const { data: recentActivity, error: activityError } = await supabase
+  // Fetch recent activity - split queries to avoid foreign key issues
+  const { data: activityData, error: activityError } = await supabase
     .from('activity_logs')
-    .select(`
-      id,
-      user_id,
-      action,
-      item_id,
-      changes,
-      timestamp,
-      user_profiles (full_name),
-      inventory_items (name)
-    `)
+    .select('id, user_id, action, item_id, changes, timestamp')
     .order('timestamp', { ascending: false })
     .limit(5)
+
+  let recentActivity = []
+
+  if (activityData && activityData.length > 0) {
+    // Fetch related data separately
+    const userIds = [...new Set(activityData.map(a => a.user_id))]
+    const itemIds = [...new Set(activityData.map(a => a.item_id).filter(Boolean))]
+
+    const { data: users } = await supabase
+      .from('user_profiles')
+      .select('id, full_name')
+      .in('id', userIds)
+
+    const { data: items } = await supabase
+      .from('inventory_items')
+      .select('id, name')
+      .in('id', itemIds)
+
+    // Combine the data
+    recentActivity = activityData.map(activity => ({
+      ...activity,
+      user_profiles: users?.find(u => u.id === activity.user_id) || null,
+      inventory_items: items?.find(i => i.id === activity.item_id) || null,
+    }))
+  }
 
   if (activityError) {
     console.error('Error fetching activity:', activityError)
@@ -183,6 +199,31 @@ export default async function DashboardPage() {
           )}
         </div>
       </div>
+
+      {/* Analytics Banner */}
+      <Link href="/analytics" className="block">
+        <div className="bg-gradient-to-br from-purple-500 via-blue-600 to-blue-700 rounded-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02] cursor-pointer overflow-hidden">
+          <div className="p-6 relative">
+            <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white opacity-10 rounded-full" />
+            <div className="absolute bottom-0 left-0 -mb-8 -ml-8 w-40 h-40 bg-white opacity-5 rounded-full" />
+
+            <div className="relative flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="bg-white bg-opacity-20 p-3 rounded-lg backdrop-blur-sm">
+                  <BarChart3 className="h-8 w-8 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">Advanced Analytics</h3>
+                  <p className="text-blue-100 mt-1">
+                    Explore detailed insights, charts, and trends
+                  </p>
+                </div>
+              </div>
+              <ArrowRight className="h-6 w-6 text-white opacity-80" />
+            </div>
+          </div>
+        </div>
+      </Link>
 
       {/* Quick Actions */}
       {(profile?.role === 'admin' || profile?.role === 'manager') && (

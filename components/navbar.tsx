@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { LogOut, Package, LayoutDashboard, Users, Search } from 'lucide-react'
+import { LogOut, Package, LayoutDashboard, Users, Search, BarChart3 } from 'lucide-react'
 import { UserRole } from '@/lib/types/database.types'
 
 interface NavbarProps {
@@ -30,6 +30,7 @@ export function Navbar({ userRole, userEmail }: NavbarProps) {
 
   const navItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['admin', 'manager', 'viewer'] },
+    { href: '/analytics', label: 'Analytics', icon: BarChart3, roles: ['admin', 'manager', 'viewer'] },
     { href: '/inventory', label: 'Inventory', icon: Package, roles: ['admin', 'manager', 'viewer'] },
     { href: '/admin/users', label: 'Users', icon: Users, roles: ['admin'] },
   ]

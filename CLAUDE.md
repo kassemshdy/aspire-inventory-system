@@ -201,13 +201,23 @@ git push origin main
 
 **Symptom:** Logs created in DB but not showing on dashboard
 
-**Causes:**
-1. RLS policies too restrictive
-2. Complex JOIN query failing
+**Error Message:**
+```
+Could not find a relationship between 'activity_logs' and 'user_profiles' in the schema cache
+```
+
+**Cause:**
+- `activity_logs.user_id` references `auth.users(id)`, not `user_profiles(id)`
+- Supabase automatic join syntax only works with direct foreign keys
+- No direct foreign key relationship between activity_logs and user_profiles
 
 **Fix:**
-1. Update RLS policies to allow authenticated users to view profiles
-2. Simplified activity query in dashboard (already implemented)
+1. Updated dashboard query to fetch data separately (already implemented)
+2. Manual join logic in application code:
+   - Fetch activity_logs
+   - Fetch related user_profiles and inventory_items
+   - Combine data using array map/find
+3. Update RLS policies to allow authenticated users to view profiles
 
 ### Issue 5: Buttons Not Showing for Admin/Manager
 
@@ -223,6 +233,31 @@ git push origin main
 2. Verify role in database: `SELECT * FROM user_profiles;`
 3. Hard refresh browser after login
 
+### Issue 6: Delete Item Foreign Key Constraint Error
+
+**Symptom:** Error when deleting items: "insert or update on table 'activity_logs' violates foreign key constraint 'activity_logs_item_id_fkey'"
+
+**Cause:**
+- Activity logging trigger was using AFTER DELETE
+- Tried to insert log entry after item was already deleted
+- Foreign key constraint prevents referencing deleted item_id
+
+**Fix:**
+1. Run `supabase/fix_delete_trigger.sql`
+2. Uses separate triggers:
+   - BEFORE DELETE for delete operations (item still exists)
+   - AFTER INSERT/UPDATE for create/update operations
+3. Ensures deletion is logged before item is removed
+
+**Verification:**
+```sql
+-- Check triggers are correctly set up
+SELECT trigger_name, event_manipulation, event_object_table, action_timing
+FROM information_schema.triggers
+WHERE event_object_table = 'inventory_items'
+ORDER BY trigger_name;
+```
+
 ---
 
 ## 📁 File Structure & Key Files
@@ -236,7 +271,8 @@ git push origin main
 
 **Database:**
 - `supabase/migrations/001_initial_schema.sql` - Complete schema
-- `supabase/fix_rls_policies.sql` - RLS policy fixes
+- `supabase/fix_rls_policies.sql` - RLS policy fixes (infinite recursion)
+- `supabase/fix_delete_trigger.sql` - Delete trigger fix (foreign key)
 - `supabase/seed_fixed.sql` - Sample data
 
 **Auth & Security:**
