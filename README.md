@@ -8,6 +8,8 @@ A modern, full-stack inventory management application with AI-powered search, ro
 ![Claude API](https://img.shields.io/badge/Claude-API-purple)
 
 ## Features
+<img width="1267" height="800" alt="image" src="https://github.com/user-attachments/assets/2f394c19-1970-468c-86a9-014902e7e94d" />
+<img width="1267" height="372" alt="image" src="https://github.com/user-attachments/assets/fb4e53b7-4e09-472c-a2b4-4bcdc3595af6" />
 
 ### Core Functionality
 - ✅ **Full CRUD Operations** - Create, read, update, and delete inventory items
