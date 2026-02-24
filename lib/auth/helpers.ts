@@ -14,14 +14,25 @@ export async function getUserProfile() {
   const supabase = await createServerSupabaseClient()
   const user = await getCurrentUser()
 
-  if (!user) return null
+  if (!user) {
+    console.log('[getUserProfile] No user found')
+    return null
+  }
 
-  const { data: profile } = await supabase
+  console.log('[getUserProfile] Fetching profile for user:', user.id)
+
+  const { data: profile, error } = await supabase
     .from('user_profiles')
     .select('*')
     .eq('id', user.id)
     .single()
 
+  if (error) {
+    console.error('[getUserProfile] Error fetching profile:', error)
+    return null
+  }
+
+  console.log('[getUserProfile] Profile fetched:', profile)
   return profile
 }
 
