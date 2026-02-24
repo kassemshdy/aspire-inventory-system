@@ -98,8 +98,8 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ```
 Admin:   admin@test.com   / admin@123
-Manager: manager@test.com / admin@123
-Viewer:  viewer@test.com  / admin@123
+Manager: manager@test.com / password123
+Viewer:  viewer@test.com  / password123
 ```
 
 ## Project Structure

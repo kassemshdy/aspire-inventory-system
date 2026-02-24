@@ -131,7 +131,10 @@ After deployment, you need to configure Supabase:
 ## Step 8: Test Your Deployed App
 
 1. Visit your Vercel URL
-2. Try logging in with: `admin@test.com` / `admin@123`
+2. Try logging in with test accounts:
+   - Admin: `admin@test.com` / `admin@123`
+   - Manager: `manager@test.com` / `password123`
+   - Viewer: `viewer@test.com` / `password123`
 3. Test these features:
    - ✅ Login/logout
    - ✅ View dashboard
@@ -239,7 +242,10 @@ Your deployment is successful when:
 Share your project:
 - **Live URL:** `https://your-project.vercel.app`
 - **GitHub:** `https://github.com/kassemshdy/aspire-inventory-system`
-- **Demo Credentials:** admin@test.com / admin@123
+- **Demo Credentials:**
+  - Admin: admin@test.com / admin@123
+  - Manager: manager@test.com / password123
+  - Viewer: viewer@test.com / password123
 
 ---
 
