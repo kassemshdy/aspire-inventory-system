@@ -4,6 +4,7 @@
 import useSWR from 'swr'
 import { Package, AlertTriangle, TrendingUp, Activity, BarChart3, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import { AIRecommendations } from '@/components/AIRecommendations'
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
@@ -136,6 +137,9 @@ export default function DashboardPage() {
           </div>
         </div>
       </Link>
+
+      {/* AI Recommendations */}
+      <AIRecommendations />
 
       {/* Recent Activity */}
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
