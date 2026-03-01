@@ -1,12 +1,10 @@
 'use client'
 
 import { useState, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 function LoginForm() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const redirectTo = searchParams.get('redirectTo') || '/dashboard'
 
@@ -30,8 +28,8 @@ function LoginForm() {
       if (error) throw error
 
       if (data.session) {
-        router.push(redirectTo)
-        router.refresh()
+        // Use window.location for instant redirect without freeze
+        window.location.href = redirectTo
       }
     } catch (err: any) {
       setError(err.message || 'Failed to login')
