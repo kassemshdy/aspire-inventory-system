@@ -20,6 +20,11 @@ A modern, full-stack inventory management application with AI-powered search, ro
 - 🤖 **AI-Powered Search** - Natural language queries using Claude API
   - Example: "show me low stock electronics"
   - Example: "items under $500"
+- ✨ **AI Purchase Recommendations** - Smart purchasing suggestions based on inventory analysis
+  - Analyzes stock levels, categories, and inventory gaps
+  - Provides prioritized recommendations (High/Medium/Low)
+  - Suggests replenishment, expansion, and complementary items
+  - Includes estimated prices and detailed reasoning
 - 📊 **Analytics Dashboard** - Real-time inventory statistics and insights
 - 📥 **CSV Import/Export** - Bulk operations for inventory management
 - 🔍 **Advanced Filtering** - Search by text, category, status, quantity, and price
@@ -173,13 +178,17 @@ aspire/
 - `PATCH /inventory/:id` - Update item
 - `DELETE /inventory/:id` - Delete item (admin only)
 
-### AI Search
+### AI Features
 - `POST /api/search/ai` - Natural language search
   ```json
   {
     "query": "show me low stock electronics"
   }
   ```
+- `GET /api/ai/recommendations` - Get AI purchase recommendations
+  - Returns prioritized suggestions for items to purchase
+  - Based on current inventory analysis
+  - Cached for 5 minutes to optimize costs
 
 ## Deployment to Vercel
 
