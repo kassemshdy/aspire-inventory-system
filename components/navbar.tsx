@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { LogOut, Package, LayoutDashboard, Users, BarChart3 } from 'lucide-react'
 import { UserRole } from '@/lib/types/database.types'
@@ -64,17 +65,17 @@ export function Navbar({ userRole, userEmail }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
-            <a href="/dashboard" className="flex items-center">
+            <Link href="/dashboard" className="flex items-center">
               <Package className="h-8 w-8 text-blue-600 dark:text-blue-400" />
               <span className="ml-2 text-xl font-bold text-gray-900 dark:text-white">Inventory</span>
-            </a>
+            </Link>
 
             <div className="hidden sm:ml-8 sm:flex sm:space-x-4">
               {filteredNavItems.map((item) => {
                 const Icon = item.icon
                 const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
                 return (
-                  <a
+                  <Link
                     key={item.href}
                     href={item.href}
                     className={`inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
@@ -85,7 +86,7 @@ export function Navbar({ userRole, userEmail }: NavbarProps) {
                   >
                     <Icon className="h-4 w-4 mr-2" />
                     {item.label}
-                  </a>
+                  </Link>
                 )
               })}
             </div>
@@ -116,7 +117,7 @@ export function Navbar({ userRole, userEmail }: NavbarProps) {
           const Icon = item.icon
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
           return (
-            <a
+            <Link
               key={item.href}
               href={item.href}
               className={`block px-3 py-2 rounded-md text-base font-medium ${
@@ -127,7 +128,7 @@ export function Navbar({ userRole, userEmail }: NavbarProps) {
             >
               <Icon className="inline h-4 w-4 mr-2" />
               {item.label}
-            </a>
+            </Link>
           )
         })}
       </div>
